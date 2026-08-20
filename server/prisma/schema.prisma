@@ -1,0 +1,60 @@
+// Prisma schema for Stitch & Style
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("customer") // "customer" | "admin"
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Product {
+  id        Int         @id @default(autoincrement())
+  name      String
+  price     Float
+  image     String
+  sizes     String      // JSON array stored as string e.g. '["S","M","L"]'
+  colors    String      // JSON array stored as string e.g. '["Red","Blue"]'
+  inStock   Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  orderItems OrderItem[]
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  userId     Int
+  user       User        @relation(fields: [userId], references: [id])
+  status     String      @default("pending") // pending, confirmed, shipped, delivered
+  total      Float
+  firstName  String
+  lastName   String
+  email      String
+  address    String
+  city       String
+  zip        String
+  createdAt  DateTime    @default(now())
+  items      OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  size      String
+  color     String
+  quantity  Int
+  price     Float
+}
