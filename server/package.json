@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc",
+    "dev": "node switch-db.js sqlite && npx prisma generate && ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "node switch-db.js postgresql && tsc",
     "start": "node dist/server.js",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push",
