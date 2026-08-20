@@ -2,7 +2,9 @@ services:
   - type: web
     name: stitch-and-style-api
     env: node
+    rootDir: server
     region: ohio
+    plan: free
     buildCommand: npm install && npm run build && npm run db:generate
     startCommand: npm run db:push && npm start
     envVars:
@@ -13,10 +15,11 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://your-vercel-project-name.vercel.app # TODO: Update this after deploying to Vercel
+        value: https://your-vercel-project-name.vercel.app
 
 databases:
   - name: stitch-and-style-db
     databaseName: stitch_and_style
     user: stitch_user
     region: ohio
+    plan: free
